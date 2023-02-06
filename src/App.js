@@ -1,21 +1,22 @@
-import { useEffect, useState } from 'react';
+import { Route, Routes } from "react-router-dom";
 
-import './App.css';
+import "./app.styles.scss";
+import Home from "./routes/home/home.component";
+import Navigation from "./routes/navigation/navigation.component";
+
+const Shop = () => {
+  return <div>I am the shop!</div>;
+};
 
 function App() {
-  const url = "https://cdn.fs.teachablecdn.com/jXxMUj86Qf2pChV37EzI"
-  const [items, setItems] = useState([])
-
-  useEffect(() => {
-    fetch(url).then(data => data.json()).then(setItems)
-  }, [])
-
-
   return (
-    <div>
-      { items.map(item => item.title) }
-    </div>
-  )
+    <Routes>
+      <Route path="/" element={<Navigation />}>
+        <Route index element={<Home />}></Route>
+        <Route path="shop" element={<Shop />}></Route>
+      </Route>
+    </Routes>
+  );
 }
 
 export default App;
