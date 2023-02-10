@@ -38,7 +38,7 @@ const SignUpForm = () => {
       const userDocRef = await createUserDocumentFromAuth(user, {
         displayName,
       });
-      console.log(userDocRef);
+
       resetFormFields();
     } catch (e) {
       // add some firebase error message handling
