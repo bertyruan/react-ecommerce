@@ -11,7 +11,16 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  writeBatch,
+  query,
+  getDocs,
+} from "firebase/firestore";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -78,3 +87,31 @@ export const createUserDocumentFromAuth = async (userAuth, args = {}) => {
 
 export const onAuthStateChangedListener = (callback) =>
   onAuthStateChanged(auth, callback);
+
+export const addCollectionAndDocuments = async (collectionKey, data) => {
+  const collectionRef = collection(db, collectionKey);
+  const batch = writeBatch(db);
+
+  data.forEach((d) => {
+    const docRef = doc(collectionRef, d.title.toLowerCase());
+    batch.set(docRef, d);
+  });
+
+  await batch.commit();
+  console.log("done");
+};
+
+export const getCollectionAndDocuments = async () => {
+  const collectionRef = collection(db, "categories");
+  const q = query(collectionRef);
+  const querySnapshop = await getDocs(q);
+
+  const categories = querySnapshop.docs.reduce((prev, curr) => {
+    const { title, items } = curr.data();
+
+    prev[title.toLowerCase()] = items;
+    return prev;
+  }, {});
+
+  return categories;
+};

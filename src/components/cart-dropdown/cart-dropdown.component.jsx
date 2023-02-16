@@ -4,13 +4,15 @@ import Button from "../button/button.component";
 import { ShoppingCartContext } from "../../context/shopping-cart.context";
 import { useContext } from "react";
 import CartItem from "../cart-item/cart-item.component";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const CartDropdown = () => {
   const { cart, setCartIsOpen } = useContext(ShoppingCartContext);
+  const navigate = useNavigate();
 
-  const closeDropdown = () => {
+  const onCheckout = () => {
     setCartIsOpen(false);
+    navigate("/checkout");
   };
 
   return (
@@ -21,9 +23,7 @@ const CartDropdown = () => {
         ))}
       </div>
 
-      <Link to="/checkout">
-        <Button onClick={closeDropdown}>GO TO CHECKOUT</Button>
-      </Link>
+      <Button onClick={onCheckout}>GO TO CHECKOUT</Button>
     </div>
   );
 };

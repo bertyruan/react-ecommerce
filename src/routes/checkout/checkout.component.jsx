@@ -12,23 +12,21 @@ const Checkout = () => {
   };
   return (
     <>
-      <table>
-        <thead>
-          <tr>
-            <th>Product</th>
-            <th>Description</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Remove</th>
-          </tr>
-        </thead>
-        <tbody>
-          {cart.map((c) => (
-            <CartRow key={c.id} item={c}></CartRow>
-          ))}
-        </tbody>
-      </table>
-      <div>Total: ${getTotal()}</div>
+      <div className="checkout-container">
+        <div className="checkout-header">
+          <span>Product</span>
+          <span>Description</span>
+          <span>Quantity</span>
+          <span>Price</span>
+          <span>Remove</span>
+        </div>
+
+        {cart.length
+          ? cart.map((c) => <CartRow key={c.id} item={c}></CartRow>)
+          : "No items in cart"}
+
+        <div className="total">Total: ${getTotal()}</div>
+      </div>
     </>
   );
 };
