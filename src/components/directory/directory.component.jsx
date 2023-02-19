@@ -7,9 +7,16 @@ const Directory = () => {
   const url = "https://cdn.fs.teachablecdn.com/jXxMUj86Qf2pChV37EzI";
   const [items, setItems] = useState([]);
 
+  const mapRoute = (items) => {
+    return items.map((item) => {
+      return { ...item, route: `shop/${item.title}` };
+    });
+  };
+
   useEffect(() => {
     fetch(url)
       .then((data) => data.json())
+      .then(mapRoute)
       .then(setItems);
   }, []);
 
