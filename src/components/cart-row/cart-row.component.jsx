@@ -1,16 +1,20 @@
 import { useContext } from "react";
 import { ShoppingCartContext } from "../../context/shopping-cart.context";
-import Button from "../button/button.component";
 import "./cart-row.styles.scss";
 
 const CartRow = ({ item }) => {
   const { imageUrl, name, quantity, price } = item;
-  const { removeItem, updateItemCount } = useContext(ShoppingCartContext);
+  const { removeItem, removeItemCount, addItemToCart } =
+    useContext(ShoppingCartContext);
+
+  const decrementCartCount = () => {
+    removeItemCount(item);
+  };
   const removeCartItem = () => {
     removeItem(item);
   };
-  const updateCount = (newCount) => {
-    updateItemCount(item, newCount);
+  const incrementCartCount = () => {
+    addItemToCart(item);
   };
   return (
     <div className="checkout-item-container">
@@ -19,11 +23,11 @@ const CartRow = ({ item }) => {
       </div>
       <span className="name">{name}</span>
       <span className="quantity">
-        <span className="arrow" onClick={updateCount.bind(this, quantity - 1)}>
+        <span className="arrow" onClick={decrementCartCount}>
           &#10094;
         </span>
         <span className="value">{quantity}</span>
-        <span className="arrow" onClick={updateCount.bind(this, quantity + 1)}>
+        <span className="arrow" onClick={incrementCartCount}>
           &#10095;
         </span>
       </span>

@@ -4,8 +4,7 @@ import { useContext } from "react";
 import { ShoppingCartContext } from "../../context/shopping-cart.context";
 
 const ShopIcon = () => {
-  const { cartIsOpen, setCartIsOpen, getCount } =
-    useContext(ShoppingCartContext);
+  const { cartIsOpen, setCartIsOpen, count } = useContext(ShoppingCartContext);
 
   const toggleDropdown = () => {
     setCartIsOpen(!cartIsOpen);
@@ -14,7 +13,7 @@ const ShopIcon = () => {
   return (
     <CartIconContainer onClick={toggleDropdown}>
       <BagIcon className="shopping-icon" />
-      <ItemCount className="item-count">{getCount()}</ItemCount>
+      <ItemCount className="item-count">{count}</ItemCount>
     </CartIconContainer>
   );
 };

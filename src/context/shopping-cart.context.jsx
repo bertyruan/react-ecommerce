@@ -1,4 +1,4 @@
-import { useState, createContext } from "react";
+import { createContext, useReducer } from "react";
 
 const getProductIndex = (cart, product) =>
   cart.findIndex((item) => item.id === product.id);
@@ -6,6 +6,7 @@ const getProductIndex = (cart, product) =>
 const addCartItem = (cart, product) => {
   const newCart = [...cart];
   const productIndex = getProductIndex(newCart, product);
+  console.log(cart[productIndex]);
   if (productIndex >= 0) {
     newCart[productIndex].quantity += 1;
   } else {
@@ -19,55 +20,115 @@ const removeCartItem = (cart, product) => {
   return cart.filter((_, idx) => idx !== productIndex);
 };
 
-const updateCartItemCount = (cart, product, count) => {
-  const productIndex = getProductIndex(cart, product);
+const removeCartItemCount = (cart, item) => {
+  const productIndex = getProductIndex(cart, item);
   if (productIndex >= 0) {
     const newCart = [...cart];
-    newCart[productIndex].quantity = count;
+    newCart[productIndex].quantity -= 1;
     return newCart;
   }
   return cart;
 };
 
+export const ShoppingCartTypes = {
+  UPDATE_CART: "UPDATE_CART",
+  SET_IS_CART_OPEN: "SET_IS_CART_OPEN",
+};
+
+const initShoppingCart = {
+  cartIsOpen: false,
+  cart: [],
+  count: 0,
+  total: 0,
+};
+
+const shoppingCartReducer = (state, action) => {
+  const { type, payload } = action;
+
+  switch (type) {
+    case ShoppingCartTypes.SET_IS_CART_OPEN:
+      return {
+        ...state,
+        cartIsOpen: payload,
+      };
+    case ShoppingCartTypes.UPDATE_CART:
+      return {
+        ...state,
+        ...payload,
+      };
+
+    default:
+      throw new Error(`Invalid type ${type} in shoppingCartReducer`);
+  }
+};
+
 export const ShoppingCartContext = createContext({
   cartIsOpen: false,
-  setCartIsOpen: () => {},
   cart: [],
+  count: 0,
+  total: 0,
+  setCartIsOpen: () => {},
   addItemToCart: () => {},
-  getCount: () => {},
   removeItem: () => {},
-  updateItemCount: () => {},
+  removeItemCount: () => {},
 });
 
 export const ShoppingCartProvider = ({ children }) => {
-  const [cartIsOpen, setCartIsOpen] = useState(false);
-  const [cart, setCart] = useState([]);
+  const [{ cartIsOpen, cart, count, total }, dispatch] = useReducer(
+    shoppingCartReducer,
+    initShoppingCart
+  );
+
+  const updateCartReducer = (newCartItems) => {
+    const count = newCartItems.reduce((prev, curr) => {
+      return prev + curr.quantity;
+    }, 0);
+
+    const total = newCartItems.reduce((prev, curr) => {
+      return prev + curr.quantity * curr.price;
+    }, 0);
+
+    dispatch({
+      type: ShoppingCartTypes.UPDATE_CART,
+      payload: {
+        cart: newCartItems,
+        count: count,
+        total: total,
+      },
+    });
+  };
+
   const addItemToCart = (item) => {
-    setCart(addCartItem(cart, item));
-  };
-  const getCount = () => {
-    return cart.reduce((prev, curr) => curr.quantity + prev, 0);
+    const newCartItems = addCartItem(cart, item);
+    updateCartReducer(newCartItems);
   };
 
-  const removeItem = (product) => {
-    setCart(removeCartItem(cart, product));
+  const removeItem = (item) => {
+    const newCartItems = removeCartItem(cart, item);
+    updateCartReducer(newCartItems);
   };
 
-  const updateItemCount = (product, count) => {
-    if (count < 1) {
+  const removeItemCount = (item) => {
+    if (item.quantity === 1) {
       return;
     }
-    setCart(updateCartItemCount(cart, product, count));
+    const newCartItems = removeCartItemCount(cart, item);
+    updateCartReducer(newCartItems);
+  };
+
+  const setCartIsOpen = (isOpen) => {
+    dispatch({ type: ShoppingCartTypes.SET_IS_CART_OPEN, payload: isOpen });
   };
 
   const value = {
     cartIsOpen,
-    setCartIsOpen,
     cart,
+    count,
+    total,
+    setCartIsOpen,
     addItemToCart,
-    getCount,
     removeItem,
-    updateItemCount,
+    removeItemCount,
   };
 
   return (

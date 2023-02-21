@@ -4,12 +4,7 @@ import { ShoppingCartContext } from "../../context/shopping-cart.context";
 import "./checkout.styles.scss";
 
 const Checkout = () => {
-  const { cart } = useContext(ShoppingCartContext);
-  const getTotal = () => {
-    return cart.reduce((prev, curr) => {
-      return prev + curr.quantity * curr.price;
-    }, 0);
-  };
+  const { cart, total } = useContext(ShoppingCartContext);
   return (
     <>
       <div className="checkout-container">
@@ -25,7 +20,7 @@ const Checkout = () => {
           ? cart.map((c) => <CartRow key={c.id} item={c}></CartRow>)
           : "No items in cart"}
 
-        <div className="total">Total: ${getTotal()}</div>
+        <div className="total">Total: ${total}</div>
       </div>
     </>
   );
