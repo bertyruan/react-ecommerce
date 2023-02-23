@@ -1,0 +1,3 @@
+export const CATEGORIES_REDUCER_TYPES = {
+  SET_CATEGORIES: "categories/SET_CATEGORIES",
+};
