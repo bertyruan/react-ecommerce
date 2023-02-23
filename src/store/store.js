@@ -7,8 +7,20 @@ import { logger } from "redux-logger";
 
 import { rootReducer } from "./root-reducer";
 
+const customLogger = (store) => (next) => (action) => {
+  if (!action.type) {
+    return next(action);
+  }
+
+  console.log(store.getState());
+  console.log(action);
+
+  next(action);
+  console.log(store.getState());
+};
+
 // logs actions and subsequent state.
-const middleWares = [logger];
+const middleWares = [customLogger];
 
 const composeEnhancers = compose(applyMiddleware(...middleWares));
 

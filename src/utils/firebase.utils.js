@@ -106,12 +106,5 @@ export const getCollectionAndDocuments = async () => {
   const q = query(collectionRef);
   const querySnapshop = await getDocs(q);
 
-  const categories = querySnapshop.docs.reduce((prev, curr) => {
-    const { title, items } = curr.data();
-
-    prev[title.toLowerCase()] = items;
-    return prev;
-  }, {});
-
-  return categories;
+  return querySnapshop.docs.map((snapshot) => snapshot.data());
 };

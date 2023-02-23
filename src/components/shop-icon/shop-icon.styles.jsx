@@ -4,8 +4,6 @@ import { ReactComponent as BagSvg } from "../../assets/shopping-bag.svg";
 export const BagIcon = styled(BagSvg)`
   width: 24px;
   height: 24px;
-  border: none;
-  background-color: none;
 `;
 
 export const CartIconContainer = styled.button`
@@ -16,6 +14,8 @@ export const CartIconContainer = styled.button`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  border: none;
+  background: none;
 `;
 
 export const ItemCount = styled.span`
