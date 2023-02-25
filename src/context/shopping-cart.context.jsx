@@ -6,7 +6,6 @@ const getProductIndex = (cart, product) =>
 const addCartItem = (cart, product) => {
   const newCart = [...cart];
   const productIndex = getProductIndex(newCart, product);
-  console.log(cart[productIndex]);
   if (productIndex >= 0) {
     newCart[productIndex].quantity += 1;
   } else {

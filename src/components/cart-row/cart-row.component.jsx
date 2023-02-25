@@ -1,20 +1,23 @@
-import { useContext } from "react";
-import { ShoppingCartContext } from "../../context/shopping-cart.context";
+import { useDispatch } from "react-redux";
+import {
+  removeItemCount,
+  removeItem,
+  addItemToCart,
+} from "../../store/cart/cart.reducer";
 import "./cart-row.styles.scss";
 
 const CartRow = ({ item }) => {
   const { imageUrl, name, quantity, price } = item;
-  const { removeItem, removeItemCount, addItemToCart } =
-    useContext(ShoppingCartContext);
+  const dispatch = useDispatch();
 
   const decrementCartCount = () => {
-    removeItemCount(item);
+    dispatch(removeItemCount(item));
   };
   const removeCartItem = () => {
-    removeItem(item);
+    dispatch(removeItem(item));
   };
   const incrementCartCount = () => {
-    addItemToCart(item);
+    dispatch(addItemToCart(item));
   };
   return (
     <div className="checkout-item-container">

@@ -6,17 +6,17 @@ import App from "./App";
 import { store } from "./store/store";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
-import { ShoppingCartProvider } from "./context/shopping-cart.context";
+import { PersistGate } from "redux-persist/integration/react";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
+      {/* <PersistGate loading={null} persistor={persistor}> */}
       <BrowserRouter>
-        <ShoppingCartProvider>
-          <App />
-        </ShoppingCartProvider>
+        <App />
       </BrowserRouter>
+      {/* </PersistGate> */}
     </Provider>
   </React.StrictMode>
 );

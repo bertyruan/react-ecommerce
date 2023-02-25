@@ -1,7 +1,4 @@
 import Button from "../button/button.component";
-
-import { ShoppingCartContext } from "../../context/shopping-cart.context";
-import { useContext } from "react";
 import CartItem from "../cart-item/cart-item.component";
 import { useNavigate } from "react-router-dom";
 import {
@@ -9,14 +6,20 @@ import {
   CartItems,
   EmptyMessage,
 } from "./cart-dropdown.styles.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCartItems } from "../../store/cart/cart.selector";
+import { setCartIsOpen } from "../../store/cart/cart.reducer";
 
 const CartDropdown = () => {
-  const { cart, setCartIsOpen } = useContext(ShoppingCartContext);
+  console.log("render/rerender");
+  const cart = useSelector(selectCartItems);
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
   const emptyMessage = <EmptyMessage>Your cart is empty</EmptyMessage>;
 
   const onCheckout = () => {
-    setCartIsOpen(false);
+    dispatch(setCartIsOpen(false));
     navigate("/checkout");
   };
 

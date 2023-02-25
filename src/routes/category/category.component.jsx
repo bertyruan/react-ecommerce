@@ -7,12 +7,10 @@ import { selectCategoriesMap } from "../../store/categories/categories.selector"
 import "./category.styles.scss";
 
 const Category = () => {
-  console.log("render/rerender");
   const { category } = useParams();
   const categories = useSelector(selectCategoriesMap);
   const [products, setProducts] = useState(categories[category]);
   useEffect(() => {
-    console.log("effect fired updating state");
     setProducts(categories[category]);
   }, [category, categories]);
 

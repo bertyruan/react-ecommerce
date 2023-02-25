@@ -11,7 +11,7 @@ import Navigation from "./routes/navigation/navigation.component";
 import Authentication from "./routes/authentication/authentication.component";
 import Shop from "./routes/shop/shop.component";
 import Checkout from "./routes/checkout/checkout.component";
-import { setCurrentUser } from "./store/user/user.action";
+import { setCurrentUser } from "./store/user/user.reducer";
 
 function App() {
   const dispatch = useDispatch();
@@ -21,7 +21,10 @@ function App() {
       if (user) {
         createUserDocumentFromAuth(user);
       }
-      dispatch(setCurrentUser(user));
+      const userSubset =
+        user && (({ accessToken, email }) => ({ accessToken, email }))(user);
+      console.log(setCurrentUser(userSubset));
+      dispatch(setCurrentUser(userSubset));
     });
     return unsubscribe;
   }, []);
