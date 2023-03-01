@@ -1,23 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDirectory } from "../../store/directory/directory.reducer";
+import { selectDirectoryItems } from "../../store/directory/directory.selector";
 
 import DirectoryItem from "../directory-item/directory-item.component";
 import "./directory.styles.scss";
+import { DirectoryType } from "./directory.types";
 
 const Directory = () => {
-  const url = "https://cdn.fs.teachablecdn.com/jXxMUj86Qf2pChV37EzI";
-  const [items, setItems] = useState([]);
-
-  const mapRoute = (items) => {
-    return items.map((item) => {
-      return { ...item, route: `shop/${item.title}` };
-    });
-  };
+  const dispatch = useDispatch();
+  const items = useSelector(selectDirectoryItems);
 
   useEffect(() => {
-    fetch(url)
-      .then((data) => data.json())
-      .then(mapRoute)
-      .then(setItems);
+    dispatch(fetchDirectory());
   }, []);
 
   return (
